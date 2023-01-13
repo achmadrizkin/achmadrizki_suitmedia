@@ -1,5 +1,6 @@
 package com.achmadrizkin.achmadrizki_suitmedia.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
@@ -14,8 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var etPalindrome: EditText
+    private lateinit var etName: EditText
     private lateinit var mainViewModel: MainViewModel
     private lateinit var btnCheck: AppCompatButton
+    private lateinit var btnNext: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,17 @@ class MainActivity : AppCompatActivity() {
                 // show dialog
                 showDialog(mainViewModel.isPalindromeString(etPalindrome.text.toString()))
             } else {
-                Toast.makeText(this, "Palindrome cannot be null / empty", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "EditText Palindrome cannot be null / empty", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        btnNext.setOnClickListener {
+            if (etName.text.isNotEmpty() && etName.text != null) {
+                val i = Intent(this@MainActivity, SecondScreenActivity::class.java)
+                i.putExtra("name", etName.text.toString())
+                startActivity(i)
+            }else {
+                Toast.makeText(this, "EditText Name cannot be null / empty", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -49,6 +62,8 @@ class MainActivity : AppCompatActivity() {
     private fun init() {
         etPalindrome = findViewById(R.id.etPalindrome)
         btnCheck = findViewById(R.id.btnCheck)
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        btnNext = findViewById(R.id.btnNext)
+        etName = findViewById(R.id.etName)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 }
